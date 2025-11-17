@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  # PostgreSQL
+  postgres:
+    image: postgres:latest
+    container_name: bank-postgres
+    environment:
+      POSTGRES_DB: bank_deposits
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - bank-network
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: bank-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - bank-network
+
+volumes:
+  postgres_data:
+
+networks:
+  bank-network:
+    driver: bridge

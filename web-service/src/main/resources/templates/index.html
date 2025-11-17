@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Банк Онлайн</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <h1 class="nav-logo">🏦 <span th:text="${appName}">Банк Онлайн</span></h1>
+        <div class="nav-menu">
+            <a href="/login" class="nav-link">Вход</a>
+            <a href="/register" class="nav-link">Регистрация</a>
+        </div>
+    </div>
+</nav>
+
+<main class="main-content">
+    <div class="hero-section">
+        <h2>Добро пожаловать в цифровой банк</h2>
+        <p>Управляйте своими финансами онлайн</p>
+        <div class="cta-buttons">
+            <a href="/register" class="btn btn-primary">Открыть счет</a>
+            <a href="/login" class="btn btn-secondary">Войти в систему</a>
+        </div>
+    </div>
+
+    <div class="features-section">
+        <div class="feature-card">
+            <h3>💳 Депозиты</h3>
+            <p>Открывайте выгодные вклады с повышенными ставками</p>
+        </div>
+        <div class="feature-card">
+            <h3>📊 Управление</h3>
+            <p>Контролируйте все ваши счета в одном месте</p>
+        </div>
+        <div class="feature-card">
+            <h3>🔐 Безопасность</h3>
+            <p>Ваши данные защищены по высшим стандартам</p>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <p>&copy; 2024 Банк Онлайн. Все права защищены.</p>
+</footer>
+</body>
+</html>
