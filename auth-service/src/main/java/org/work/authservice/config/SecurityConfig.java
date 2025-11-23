@@ -14,10 +14,9 @@ import org.work.authservice.security.JwtFilter;
 @Configuration
 public class SecurityConfig {
 
-    // УБЕРИТЕ конструктор с JwtFilter
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception { // ← добавьте JwtFilter как параметр
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()

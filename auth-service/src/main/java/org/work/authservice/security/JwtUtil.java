@@ -46,7 +46,6 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Jwt jwt = jwtDecoder.decode(token);
-            // Проверяем, не истек ли токен
             return jwt.getExpiresAt() == null || jwt.getExpiresAt().isAfter(Instant.now());
         } catch (JwtException e) {
             return false;

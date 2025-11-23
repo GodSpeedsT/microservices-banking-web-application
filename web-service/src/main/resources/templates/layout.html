@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' - Банк Онлайн'">Банк Онлайн</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Навигация -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="nav-logo">
+            <span class="logo-icon">🏦</span>
+            <span class="logo-text">Банк Онлайн</span>
+        </a>
+        <div class="nav-menu">
+            <a href="/" class="nav-link active">Главная</a>
+            <th:block th:if="${isAuthenticated != null and isAuthenticated}">
+                <a href="/dashboard" class="nav-link">Кабинет</a>
+                <a href="/deposits" class="nav-link">Депозиты</a>
+                <a href="/transactions" class="nav-link">Операции</a>
+                <div class="nav-user">
+                    <span class="user-avatar">👤</span>
+                    <span class="username" th:text="${username}"></span>
+                </div>
+                <a href="/auth/logout" class="nav-link logout">Выйти</a>
+            </th:block>
+            <th:block th:unless="${isAuthenticated != null and isAuthenticated}">
+                <a href="/auth/login" class="nav-link">Вход</a>
+                <a href="/auth/register" class="btn-nav">Открыть счёт</a>
+            </th:block>
+        </div>
+    </div>
+</nav>
+
+<!-- Основной контент -->
+<main class="main-content">
+    <!-- Уведомления -->
+    <div th:if="${success}" class="alert alert-success">
+        <span class="alert-icon">✅</span>
+        <span th:text="${success}"></span>
+    </div>
+    <div th:if="${error}" class="alert alert-error">
+        <span class="alert-icon">❌</span>
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Контент будет вставлен здесь -->
+    <div th:insert="${content}"></div>
+</main>
+
+<!-- Футер -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <div class="footer-logo">
+                <span class="logo-icon">🏦</span>
+                <span class="logo-text">Банк Онлайн</span>
+            </div>
+            <p class="footer-description">
+                Современный цифровой банк для комфортного управления финансами
+            </p>
+        </div>
+
+        <div class="footer-section">
+            <h4>Продукты</h4>
+            <a href="/deposits">Депозиты</a>
+            <a href="#">Кредиты</a>
+            <a href="#">Карты</a>
+            <a href="#">Инвестиции</a>
+        </div>
+
+        <div class="footer-section">
+            <h4>Помощь</h4>
+            <a href="#">Поддержка</a>
+            <a href="#">FAQ</a>
+            <a href="#">Контакты</a>
+            <a href="#">О банке</a>
+        </div>
+
+        <div class="footer-section">
+            <h4>Контакты</h4>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span class="contact-icon">📞</span>
+                    <span>8-800-123-45-67</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">✉️</span>
+                    <span>support@bank-online.ru</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">🕒</span>
+                    <span>Круглосуточно</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2024 Банк Онлайн. Все права защищены.</p>
+        <div class="footer-links">
+            <a href="#">Политика конфиденциальности</a>
+            <a href="#">Условия использования</a>
+            <a href="#">Карта сайта</a>
+        </div>
+    </div>
+</footer>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

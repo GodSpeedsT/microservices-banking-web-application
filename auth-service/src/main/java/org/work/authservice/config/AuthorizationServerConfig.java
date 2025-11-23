@@ -26,7 +26,7 @@ public class AuthorizationServerConfig {
                 .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .csrf(csrf -> csrf.ignoringRequestMatchers(authorizationServerConfigurer.getEndpointsMatcher()))
-                // вместо apply(...) теперь используем with(...)
+
                 .with(authorizationServerConfigurer, (configurer) -> {});
 
         return http.build();

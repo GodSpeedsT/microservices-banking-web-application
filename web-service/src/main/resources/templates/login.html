@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout(~{::content}, ~{::title})">
+<head>
+    <title>Вход в систему</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 class="auth-title">Вход в систему</h1>
+            <p class="auth-subtitle">Введите ваши учетные данные для доступа к личному кабинету</p>
+
+            <form th:action="@{/auth/login}" method="post" class="auth-form">
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" required
+                           placeholder="Введите ваш логин" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" required
+                           placeholder="Введите ваш пароль" class="form-input">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Войти</button>
+            </form>
+
+            <div class="auth-links">
+                <p>Еще нет аккаунта? <a href="/auth/register" class="auth-link">Зарегистрируйтесь</a></p>
+                <p><a href="/" class="auth-link">← Вернуться на главную</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

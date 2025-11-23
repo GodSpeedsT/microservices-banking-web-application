@@ -1,7 +1,29 @@
 server:
-  port: 8083
+  port: "8080"
 
-spring:
-  application:
-    name: transaction-service
+eureka:
+  url: "http://localhost:8761/eureka"
+  instance:
+    hostname: "localhost"
+    app: "transaction-service"
+    port: 8080
 
+database:
+  postgres-url: "host=localhost port=5432 user=postgres password=password dbname=transaction_service sslmode=disable"
+  redis-url: "localhost:6379"
+
+services:
+  auth: "http://auth-service:8081"
+  deposit: "http://deposit-service:8082"
+
+security:
+  oauth2:
+    client-id: "transaction-service-client"
+    client-secret: "transaction-secret"
+    token-url: "http://auth-service:8081/oauth/token"
+
+logging:
+  level: "info"
+
+cache:
+  ttl: "300s" # 5 minutes

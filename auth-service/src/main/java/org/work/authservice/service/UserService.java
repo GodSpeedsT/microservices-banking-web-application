@@ -17,13 +17,12 @@ public class UserService {
 
     public UserService(
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder // ← PasswordEncoder будет внедрен Spring'ом
+            PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // остальной код без изменений...
     public User registerUser(String username, String rawPassword, Set<Role> roles) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username is already in use");
