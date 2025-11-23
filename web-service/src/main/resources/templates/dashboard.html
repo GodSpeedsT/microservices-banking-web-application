@@ -1,75 +1,74 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет - Банк Онлайн</title>
+    <title>Личный кабинет</title>
 </head>
 <body>
-<!--<div th:fragment="content">-->
-<!--    <div class="dashboard-header">-->
-<!--        <h1>Личный кабинет</h1>-->
-<!--        <p class="welcome-text">Добро пожаловать, <span th:text="${username}"></span>!</p>-->
-<!--    </div>-->
+<div th:replace="layout :: ~{main}">
+    <div th:fragment="content">
+        <div class="dashboard-header">
+            <h1>Личный кабинет</h1>
+            <p class="welcome-text">Добро пожаловать, <span th:text="${username}"></span>!</p>
+        </div>
 
-<!--    <div class="dashboard-grid">-->
-<!--        <div class="dashboard-card">-->
-<!--            <div class="card-header">-->
-<!--                <h3>💰 Баланс</h3>-->
-<!--                <span class="card-badge">Обновлено</span>-->
-<!--            </div>-->
-<!--            <div class="card-content">-->
-<!--                <div class="balance-amount">₽ 0.00</div>-->
-<!--                <p class="card-description">Текущий доступный баланс</p>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div th:if="${isStubMode}" class="alert alert-info">
+            <h4>🔧 Режим разработки</h4>
+            <p>Система работает в режиме заглушки. Некоторые функции могут быть ограничены.</p>
+        </div>
 
-<!--        <div class="dashboard-card">-->
-<!--            <div class="card-header">-->
-<!--                <h3>🏦 Депозиты</h3>-->
-<!--                <span class="card-badge">0 активных</span>-->
-<!--            </div>-->
-<!--            <div class="card-content">-->
-<!--                <div class="stat-number">0</div>-->
-<!--                <p class="card-description">Активных депозитных счетов</p>-->
-<!--            </div>-->
-<!--            <div class="card-actions">-->
-<!--                <a href="/deposits" class="btn btn-primary">Управление</a>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>💰 Баланс</h3>
+                    <span class="card-badge">Обновлено</span>
+                </div>
+                <div class="card-content">
+                    <div class="balance-amount">₽ 0.00</div>
+                    <p class="card-description">Текущий доступный баланс</p>
+                </div>
+            </div>
 
-<!--        <div class="dashboard-card">-->
-<!--            <div class="card-header">-->
-<!--                <h3>📊 Операции</h3>-->
-<!--                <span class="card-badge">За все время</span>-->
-<!--            </div>-->
-<!--            <div class="card-content">-->
-<!--                <div class="stat-number">0</div>-->
-<!--                <p class="card-description">Выполненных операций</p>-->
-<!--            </div>-->
-<!--            <div class="card-actions">-->
-<!--                <a href="/transactions" class="btn btn-primary">История</a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>🏦 Депозиты</h3>
+                    <span class="card-badge">0 активных</span>
+                </div>
+                <div class="card-content">
+                    <div class="stat-number">0</div>
+                    <p class="card-description">Активных депозитных счетов</p>
+                </div>
+                <div class="card-actions">
+                    <a href="/deposits" class="btn btn-primary">Управление</a>
+                </div>
+            </div>
 
-<div th:if="${isStubMode}" class="alert alert-info">
-    <h4>🔧 Режим разработки</h4>
-    <p>Система работает в режиме заглушки. Некоторые функции могут быть ограничены.</p>
-</div>
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>📊 Операции</h3>
+                    <span class="card-badge">За все время</span>
+                </div>
+                <div class="card-content">
+                    <div class="stat-number">0</div>
+                    <p class="card-description">Выполненных операций</p>
+                </div>
+                <div class="card-actions">
+                    <a href="/transactions" class="btn btn-primary">История</a>
+                </div>
+            </div>
+        </div>
 
-<div class="card">
-    <div class="card-header">
-        <h5>Статус сервисов</h5>
-    </div>
-    <div class="card-body">
-        <div th:each="service : ${servicesStatus}">
-            <span th:text="${service.key}">Service</span>:
-            <span th:text="${service.value}">Status</span>
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>Статус сервисов</h5>
+            </div>
+            <div class="card-body">
+                <div th:each="service : ${servicesStatus}" class="service-status">
+                    <span class="service-name" th:text="${service.key}">Service</span>:
+                    <span class="service-value" th:text="${service.value}">Status</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 </body>
 </html>

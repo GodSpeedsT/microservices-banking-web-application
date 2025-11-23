@@ -1,5 +1,10 @@
 package org.work.authservice.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class RefreshRequest {
     private String refreshToken;
 
@@ -10,11 +15,4 @@ public class RefreshRequest {
         this.refreshToken = refreshToken;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
 }

@@ -1,5 +1,6 @@
 package org.work.authservice.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -12,14 +13,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.work.authservice.security.JwtFilter;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
-
+    // УБИРАЕМ зависимость от JwtFilter из конструктора
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
-        http
+        return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**", "/actuator/health").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -28,10 +30,9 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // ← используйте параметр
-                .csrf(csrf -> csrf.disable());
-
-        return http.build();
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(csrf -> csrf.disable())
+                .build();
     }
 
     @Bean

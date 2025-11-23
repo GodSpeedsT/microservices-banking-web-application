@@ -1,6 +1,7 @@
 package org.work.authservice.config;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -13,18 +14,18 @@ import javax.crypto.spec.SecretKeySpec;
 @Configuration
 public class JwtConfig {
 
-    private static final String SECRET_KEY = "testpassword"; // вынеси в application.yml
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), "HmacSHA256");
-        return new NimbusJwtEncoder(new ImmutableSecret<>(secretKey));
+        SecretKeySpec key = new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
+        return new NimbusJwtEncoder(new ImmutableSecret<>(key));
     }
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), "HmacSHA256");
-        return NimbusJwtDecoder.withSecretKey(secretKey).build();
+        SecretKeySpec key = new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
+        return NimbusJwtDecoder.withSecretKey(key).build();
     }
 }
-

@@ -3,11 +3,13 @@ package org.example.webservice.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthRequest {
+public class UserResponse {
+    private Long id;
     private String username;
-    private String password;
+    private List<String> roles;
 }
