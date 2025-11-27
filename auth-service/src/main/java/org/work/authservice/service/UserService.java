@@ -14,11 +14,15 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder; // Используем PasswordEncoder напрямую
+    private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
     private final ValidationService validationService;
 
+    /**
+     * Регистрирует нового пользователя с возможностью указания ролей.
+     */
     @Transactional
     public User registerUser(String username, String rawPassword, Set<String> roleNames) {
         validationService.validateUsername(username);
@@ -34,23 +38,36 @@ public class UserService {
 
         User user = new User();
         user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(rawPassword)); // Используем напрямую
+        // Хеширование пароля перед сохранением
+        user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRoles(roles);
 
         return userRepository.save(user);
     }
 
+    /**
+     * Регистрирует нового пользователя с дефолтной ролью.
+     */
     @Transactional
     public User registerUser(String username, String rawPassword) {
         return registerUser(username, rawPassword, null);
     }
 
+    /**
+     * Ищет пользователя по имени, возвращает Optional.
+     * Используется в CustomUserDetailsService.
+     */
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    // УДАЛЯЕМ этот метод, чтобы разорвать цикл
-    // public PasswordEncoder getPasswordEncoder() {
-    //     return passwordEncoder;
-    // }
+    /**
+     * Ищет пользователя по имени и возвращает объект User.
+     * Выбрасывает RuntimeException, если пользователь не найден.
+     * Удобен для использования в контроллерах (например, UserController), где токен уже проверен.
+     */
+    public User findByUsernameOrFail(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+    }
 }

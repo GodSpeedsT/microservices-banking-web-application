@@ -1,43 +1,37 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="layout :: layout(~{::content}, ~{::title})">
-<head>
-    <title>История операций</title>
-</head>
-<body>
-<div th:fragment="content">
-    <div class="page-header">
-        <h1>История операций</h1>
-        <p>Просмотр всех ваших финансовых операций</p>
-    </div>
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"-->
+<!--      th:replace="layout :: layout(~{::content}, ~{::title})">-->
+<!--<head>-->
+<!--    <title>История операций</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div th:fragment="content">-->
+<!--    <div class="page-header">-->
+<!--        <h1>История операций</h1>-->
+<!--        <p>Просмотр всех ваших финансовых операций, <span sec:authentication="name"></span></p>-->
+<!--    </div>-->
 
-    <div class="transactions-container">
-        <div class="transactions-empty-state">
-            <div class="empty-icon">📊</div>
-            <h3>Операции не найдены</h3>
-            <p>Здесь будет отображаться история всех ваших финансовых операций</p>
-            <p class="empty-hint">После выполнения первой операции она появится в этом списке</p>
-        </div>
+<!--    <div class="alert alert-info">-->
+<!--        <span>ℹ️</span>-->
+<!--        <h4>Сервис операций не подключен</h4>-->
+<!--        <p>Здесь будет отображаться история всех ваших финансовых операций. Пока данные недоступны.</p>-->
+<!--    </div>-->
 
-        <div class="transactions-filters">
-            <div class="filter-group">
-                <label>Период:</label>
-                <select disabled>
-                    <option>За все время</option>
-                    <option>За месяц</option>
-                    <option>За неделю</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label>Тип операции:</label>
-                <select disabled>
-                    <option>Все операции</option>
-                    <option>Пополнение</option>
-                    <option>Списание</option>
-                </select>
-            </div>
-        </div>
-    </div>
-</div>
-</body>
-</html>
+<!--    <div class="transactions-filters">-->
+<!--        <div class="filter-group">-->
+<!--            <label>Период:</label>-->
+<!--            <select>-->
+<!--                <option>За все время</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <div class="filter-group">-->
+<!--            <label>Тип операции:</label>-->
+<!--            <select>-->
+<!--                <option>Все операции</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

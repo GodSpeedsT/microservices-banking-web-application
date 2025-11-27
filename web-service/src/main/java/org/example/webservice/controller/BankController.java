@@ -1,8 +1,7 @@
 package org.example.webservice.controller;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.service.AuthService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class BankController {
 
-    private final AuthService authService;
-
     @GetMapping
-    public String index(HttpSession session, Model model) {
-        boolean isAuthenticated = authService.isAuthenticated(session);
+    public String index(Model model) {
+        // Проверка аутентификации в контексте Spring Security
+        boolean isAuthenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+
+        // В Thymeleaf эта переменная больше не нужна, но оставим для совместимости с шаблоном index.html
         model.addAttribute("isAuthenticated", isAuthenticated);
 
         if (isAuthenticated) {
-            model.addAttribute("username", authService.getUsername(session));
+            // Имя пользователя будет доступно через #authentication.name в шаблоне
+            model.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
         }
 
         return "index";

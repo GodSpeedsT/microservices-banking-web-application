@@ -1,7 +1,7 @@
 package org.example.webservice.controller;
 
-import jakarta.servlet.http.HttpSession;
-import org.example.webservice.service.AuthService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,25 +13,22 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/deposits")
+// Убрана инъекция AuthService
 public class DepositController {
 
-    private final AuthService authService;
-
-    public DepositController(AuthService authService) {
-        this.authService = authService;
-    }
-
     @GetMapping
-    public String deposits(Model model, HttpSession session) {
-        if (!authService.isAuthenticated(session)) {
-            return "redirect:/auth/login";
+    public String deposits(Model model, @AuthenticationPrincipal OidcUser principal) {
+
+        String username = principal.getClaimAsString("preferred_username");
+        if (username == null) {
+            username = principal.getSubject();
         }
 
         // ЗАГЛУШКА: вместо реальных данных из deposit-service
         List<Map<String, Object>> stubDeposits = createStubDeposits();
 
         model.addAttribute("title", "Мои депозиты");
-        model.addAttribute("username", authService.getUsername(session));
+        model.addAttribute("username", username);
         model.addAttribute("deposits", stubDeposits);
         model.addAttribute("message", "Депозитный сервис временно недоступен. Отображаются тестовые данные.");
         model.addAttribute("serviceStatus", "stub");
@@ -40,9 +37,9 @@ public class DepositController {
     }
 
     private List<Map<String, Object>> createStubDeposits() {
+        // ... (метод без изменений)
         List<Map<String, Object>> deposits = new ArrayList<>();
 
-        // Тестовые данные депозитов
         deposits.add(Map.of(
                 "id", "DEP001",
                 "type", "Накопительный",

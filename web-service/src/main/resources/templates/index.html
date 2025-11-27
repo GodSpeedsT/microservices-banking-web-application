@@ -4,643 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Банк Онлайн - Главная</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Reset и базовые стили */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --primary-color: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary-color: #64748b;
-            --accent-color: #f59e0b;
-            --success-color: #10b981;
-            --error-color: #ef4444;
-            --background-color: #f8fafc;
-            --surface-color: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --border-radius: 12px;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: var(--text-primary);
-            background-color: var(--background-color);
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Навигация */
-        .navbar {
-            background: var(--surface-color);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--text-primary);
-        }
-
-        .logo-icon { font-size: 2rem; }
-
-        .logo-text {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-menu {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: var(--text-secondary);
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: var(--primary-color);
-            background: rgba(37, 99, 235, 0.1);
-        }
-
-        .btn-nav {
-            background: var(--primary-color);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-nav:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Герой секция */
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-            z-index: 1;
-            color: white;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            backdrop-filter: blur(10px);
-            margin-bottom: 2rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            line-height: 1.6;
-            margin-bottom: 2.5rem;
-            opacity: 0.9;
-            max-width: 500px;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #d97706;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .btn-large {
-            padding: 1.25rem 2.5rem;
-            font-size: 1.125rem;
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            opacity: 0.8;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Секция преимуществ */
-        .features-section {
-            padding: 6rem 0;
-            background: var(--surface-color);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .section-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: var(--surface-color);
-            padding: 2.5rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        .feature-description {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        /* CTA секция */
-        .cta-section {
-            padding: 6rem 0;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-            text-align: center;
-        }
-
-        .cta-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .cta-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .cta-subtitle {
-            font-size: 1.25rem;
-            margin-bottom: 2.5rem;
-            opacity: 0.9;
-            line-height: 1.6;
-        }
-
-        .cta-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: white;
-        }
-
-        /* Футер */
-        .footer {
-            background: var(--text-primary);
-            color: white;
-            padding: 4rem 0 2rem;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1.5fr;
-            gap: 3rem;
-        }
-
-        .footer-section h4 {
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-        }
-
-        .footer-section a {
-            display: block;
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-bottom: 0.75rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section a:hover {
-            color: white;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-
-        .footer-description {
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 2rem 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.875rem;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .hero-title { font-size: 2.5rem; }
-            .hero-actions { flex-direction: column; align-items: center; }
-            .features-grid { grid-template-columns: 1fr; }
-            .footer-container { grid-template-columns: 1fr; gap: 2rem; }
-            .footer-bottom { flex-direction: column; text-align: center; }
-            .section-title { font-size: 2.5rem; }
-            .nav-menu { gap: 1rem; }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-<!-- Навигация -->
+<!-- Navigation -->
 <nav class="navbar">
-    <div class="nav-container">
-        <a href="/" class="nav-logo">
-            <span class="logo-icon">🏦</span>
-            <span class="logo-text">Банк Онлайн</span>
-        </a>
-        <div class="nav-menu">
-            <a href="/" class="nav-link active">Главная</a>
-            <a href="/auth/login" class="nav-link">Вход</a>
-            <a href="/auth/register" class="btn-nav">Открыть счёт</a>
+    <div class="container">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <span class="nav-logo-icon">🏦</span>
+                <span>Банк Онлайн</span>
+            </a>
+            <div class="nav-menu">
+                <a href="/" class="nav-link active">Главная</a>
+                <a href="/auth/login" class="nav-link">Вход</a>
+                <a href="/auth/register" class="btn-nav">Открыть счёт</a>
+            </div>
         </div>
     </div>
 </nav>
 
-<!-- Герой секция -->
-<section class="hero-section">
-    <div class="hero-container">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="badge-icon">🚀</span>
-                <span>Цифровой банк нового поколения</span>
-            </div>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content fade-in">
             <h1 class="hero-title">
-                Финансы под
-                <span class="gradient-text">полным контролем</span>
+                Современный банкинг<br>для цифровой эпохи
             </h1>
             <p class="hero-subtitle">
-                Откройте для себя современный подход к банковским услугам.
-                Управляйте счетами, открывайте депозиты и отслеживайте операции
-                в одном удобном приложении.
+                Управляйте финансами легко и безопасно. Откройте для себя новые возможности<br>
+                банковского обслуживания с нашим интуитивно понятным сервисом.
             </p>
             <div class="hero-actions">
-                <a href="/auth/register" class="btn btn-primary btn-large">
-                    <span class="btn-icon">✨</span>
-                    Начать бесплатно
+                <a href="/auth/login" class="btn btn-primary btn-lg">
+                    <span>🔐</span>
+                    Войти в аккаунт
                 </a>
-                <a href="/auth/login" class="btn btn-secondary btn-large">
-                    <span class="btn-icon">🔑</span>
-                    Войти в систему
-                </a>
-            </div>
-            <div class="hero-stats">
-                <div class="stat">
-                    <div class="stat-number">50K+</div>
-                    <div class="stat-label">активных клиентов</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">₽10МЛРД+</div>
-                    <div class="stat-label">управляемых средств</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">24/7</div>
-                    <div class="stat-label">доступность</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Секция преимуществ -->
-<section class="features-section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Почему выбирают нас</h2>
-            <p class="section-subtitle">Все преимущества современного банкинга в одном месте</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3 class="feature-title">Мгновенные операции</h3>
-                <p class="feature-description">
-                    Переводы, платежи и открытие счетов в пару кликов.
-                    Никаких очередей и бумажной волокиты.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">🔐</div>
-                <h3 class="feature-title">Максимальная безопасность</h3>
-                <p class="feature-description">
-                    Ваши средства и данные защищены по высшим стандартам
-                    банковской безопасности.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3 class="feature-title">Умная аналитика</h3>
-                <p class="feature-description">
-                    Детальная статистика и аналитика ваших финансов
-                    для принятия взвешенных решений.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">🎯</div>
-                <h3 class="feature-title">Выгодные условия</h3>
-                <p class="feature-description">
-                    Повышенные ставки по депозитам и минимальные комиссии
-                    за все виды операций.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">🌍</div>
-                <h3 class="feature-title">Доступность</h3>
-                <p class="feature-description">
-                    Полный контроль над финансами из любой точки мира
-                    в любое время суток.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">💎</div>
-                <h3 class="feature-title">Премиум сервис</h3>
-                <p class="feature-description">
-                    Персональный менеджер и приоритетное обслуживание
-                    для всех клиентов банка.
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- CTA секция -->
-<section class="cta-section">
-    <div class="container">
-        <div class="cta-content">
-            <h2 class="cta-title">Готовы начать?</h2>
-            <p class="cta-subtitle">
-                Присоединяйтесь к 50,000+ клиентов, которые уже управляют
-                своими финансами с нами
-            </p>
-            <div class="cta-actions">
-                <a href="/auth/register" class="btn btn-primary btn-large">
-                    <span class="btn-icon">🚀</span>
-                    Создать аккаунт
-                </a>
-                <a href="/auth/login" class="btn btn-outline btn-large">
-                    <span class="btn-icon">🔑</span>
-                    Войти в систему
+                <a href="/auth/register" class="btn btn-secondary btn-lg">
+                    <span>📝</span>
+                    Открыть счёт
                 </a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Футер -->
+<!-- Features Section -->
+<section class="container" style="padding: 6rem 0;">
+    <div class="text-center mb-4">
+        <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+            Почему выбирают нас
+        </h2>
+        <p style="font-size: 1.125rem; color: var(--text-light); max-width: 600px; margin: 0 auto;">
+            Мы предлагаем современные финансовые решения для комфортного управления вашими средствами
+        </p>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="card text-center">
+            <div class="card-header">
+                <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">⚡</span>
+                <h3 class="card-title">Мгновенные операции</h3>
+            </div>
+            <p>Переводы и платежи выполняются в реальном времени без задержек</p>
+        </div>
+
+        <div class="card text-center">
+            <div class="card-header">
+                <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🛡️</span>
+                <h3 class="card-title">Безопасность</h3>
+            </div>
+            <p>Многоуровневая защита и шифрование всех транзакций</p>
+        </div>
+
+        <div class="card text-center">
+            <div class="card-header">
+                <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">📱</span>
+                <h3 class="card-title">Доступность</h3>
+            </div>
+            <p>Полный контроль над финансами в любое время из любого места</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
 <footer class="footer">
-    <div class="footer-container">
-        <div class="footer-section">
-            <div class="footer-logo">
-                <span class="logo-icon">🏦</span>
-                <span class="logo-text">Банк Онлайн</span>
-            </div>
-            <p class="footer-description">
-                Современный цифровой банк для комфортного управления финансами
-            </p>
-        </div>
-
-        <div class="footer-section">
-            <h4>Продукты</h4>
-            <a href="/deposits">Депозиты</a>
-            <a href="#">Кредиты</a>
-            <a href="#">Карты</a>
-            <a href="#">Инвестиции</a>
-        </div>
-
-        <div class="footer-section">
-            <h4>Помощь</h4>
-            <a href="#">Поддержка</a>
-            <a href="#">FAQ</a>
-            <a href="#">Контакты</a>
-            <a href="#">О банке</a>
-        </div>
-
-        <div class="footer-section">
-            <h4>Контакты</h4>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <span class="contact-icon">📞</span>
-                    <span>8-800-123-45-67</span>
-                </div>
-                <div class="contact-item">
-                    <span class="contact-icon">✉️</span>
-                    <span>support@bank-online.ru</span>
-                </div>
-                <div class="contact-item">
-                    <span class="contact-icon">🕒</span>
-                    <span>Круглосуточно</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-bottom">
-        <p>&copy; 2024 Банк Онлайн. Все права защищены.</p>
-        <div class="footer-links">
-            <a href="#">Политика конфиденциальности</a>
-            <a href="#">Условия использования</a>
-            <a href="#">Карта сайта</a>
+    <div class="container">
+        <div class="footer-content">
+            <p>&copy; 2024 Банк Онлайн. Все права защищены.</p>
         </div>
     </div>
 </footer>
+
+<script src="/js/app.js"></script>
 </body>
 </html>
