@@ -22,7 +22,6 @@ public class UserController {
 
     private final UserService userService;
 
-    // Стандартный OIDC endpoint
     @GetMapping("/userinfo")
     public ResponseEntity<Map<String, Object>> getUserInfo(Authentication authentication) {
         String username = authentication.getName();

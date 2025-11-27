@@ -14,7 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -29,28 +31,19 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
-        // Создаем конфигуратор сервера авторизации
+        // НОВЫЙ СПОСОБ вместо deprecated applyDefaultSecurity()
         OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
                 new OAuth2AuthorizationServerConfigurer();
 
-        // Подключаем конфигуратор к HttpSecurity и включаем OpenID Connect (OIDC)
         http
-                .with(authorizationServerConfigurer, (authorizationServer) ->
-                        authorizationServer
-                                .oidc(Customizer.withDefaults())	// Включаем поддержку OIDC
-                );
-
-        http
-                // Указываем, что этот фильтр обрабатывает только эндпоинты Auth Server'а
                 .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
-                // Обработка исключений: если не авторизован -> редирект на страницу логина
+                .with(authorizationServerConfigurer, Customizer.withDefaults())
                 .exceptionHandling((exceptions) -> exceptions
                         .defaultAuthenticationEntryPointFor(
                                 new LoginUrlAuthenticationEntryPoint("/login"),
                                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                         )
                 )
-                // Принимаем JWT токены (чтобы сервер мог валидировать свои же токены)
                 .oauth2ResourceServer((resourceServer) -> resourceServer
                         .jwt(Customizer.withDefaults()));
 
@@ -65,11 +58,17 @@ public class SecurityConfig {
                         .requestMatchers("/auth/register", "/actuator/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
-                // Стандартная форма логина
                 .formLogin(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable());
 
         return http.build();
+    }
+
+    @Bean
+    public AuthorizationServerSettings authorizationServerSettings() {
+        return AuthorizationServerSettings.builder()
+                .issuer("http://localhost:8081/auth")
+                .build();
     }
 
     @Bean

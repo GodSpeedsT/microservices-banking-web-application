@@ -33,23 +33,22 @@ import java.util.stream.Collectors;
 @Configuration
 public class AuthorizationServerConfig {
 
-    // Репозиторий клиентов. Лучше вынести в БД (JdbcRegisteredClientRepository), но пока In-Memory
     @Bean
-    public RegisteredClientRepository registeredClientRepository(PasswordEncoder passwordEncoder) {
-        // Web Client (для твоего frontend сервиса)
+    public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient webClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("web-client")
-                .clientSecret(passwordEncoder.encode("secret"))
+                .clientSecret("{noop}secret") // Используем {noop} для простоты
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/web-client") // Важно! URL твоего Web-сервиса
                 .redirectUri("http://localhost:8080/login/oauth2/code/web-client")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .scope("read")
                 .scope("write")
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
+                .clientSettings(ClientSettings.builder()
+                        .requireAuthorizationConsent(false)
+                        .build())
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenTimeToLive(Duration.ofHours(1))
                         .refreshTokenTimeToLive(Duration.ofDays(30))
@@ -59,6 +58,7 @@ public class AuthorizationServerConfig {
         return new InMemoryRegisteredClientRepository(webClient);
     }
 
+    // Остальные бины без изменений...
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
         KeyPair keyPair = generateRsaKey();

@@ -23,7 +23,6 @@ public class AuthController {
     public ResponseEntity<UserResponse> register(@Valid @RequestBody AuthRequest request) {
         log.info("Registration attempt for user: {}", request.getUsername());
 
-        // Регистрируем пользователя
         User user = userService.registerUser(request.getUsername(), request.getPassword());
 
         UserResponse response = new UserResponse(user.getId(), user.getUsername(),
@@ -31,9 +30,4 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
-
-    // Методы login, refresh и logout удалены, так как они теперь
-    // обрабатываются стандартными OAuth2 эндпоинтами:
-    // - /oauth2/token (для получения токена)
-    // - /logout (для выхода из сессии, если используется)
 }

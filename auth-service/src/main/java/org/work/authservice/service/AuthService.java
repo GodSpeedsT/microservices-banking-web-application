@@ -18,21 +18,10 @@ public class AuthService {
     // PasswordEncoder оставлен для возможности будущих внутренних проверок, но в основном используется в UserService
     private final PasswordEncoder passwordEncoder;
 
-    /**
-     * Методы login() и refreshToken() удалены.
-     * * Теперь:
-     * 1. Регистрация: /auth/register (остается здесь)
-     * 2. Логин (получение токена):
-     * - Для браузера: через стандартную форму /login (обработку берет на себя Spring Security)
-     * - Для API: через стандартный эндпоинт OAuth2 /oauth2/token
-     */
-
     @Transactional
     public User register(String username, String rawPassword) {
         log.info("Attempting registration for user: {}", username);
 
-        // Вся логика валидации и сохранения перенесена в UserService,
-        // чтобы AuthService был максимально тонким.
         User newUser = userService.registerUser(username, rawPassword);
 
         log.info("User registered successfully: {}", username);

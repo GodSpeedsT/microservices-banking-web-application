@@ -15,11 +15,13 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**",
-                                "/auth/register", "/auth/login", "/actuator/**").permitAll()
+                                "/auth/register", "/actuator/**").permitAll()
+                        // Разрешаем доступ к странице логина без аутентификации
+                        .requestMatchers("/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/auth/login")
+                        .loginPage("/auth/login")  // Наша кастомная страница
                         .defaultSuccessUrl("/dashboard", true)
                         .failureUrl("/auth/login?error=true")
                 )
