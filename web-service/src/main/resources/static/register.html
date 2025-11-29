@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Банк Онлайн</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card fade-in">
+        <div class="auth-header">
+            <span class="auth-icon">📝</span>
+            <h1 class="auth-title">Открытие счёта</h1>
+            <p class="auth-subtitle">Создайте аккаунт для доступа ко всем возможностям</p>
+        </div>
+
+        <!-- Error Alert -->
+        <div id="errorAlert" class="alert alert-error hidden">
+            <span>⚠️</span>
+            <span id="errorMessage"></span>
+        </div>
+
+        <form id="registerForm" action="/auth/register" method="post">
+            <div class="form-group">
+                <label for="username" class="form-label">Имя пользователя</label>
+                <input type="text" id="username" name="username" class="form-input"
+                       placeholder="Введите имя пользователя" required
+                       minlength="3" maxlength="50">
+                <div class="text-sm text-error hidden" id="usernameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" id="password" name="password" class="form-input"
+                       placeholder="Создайте надёжный пароль" required
+                       minlength="8">
+                <div class="text-sm text-error hidden" id="passwordError"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full btn-lg">
+                <span>🚀</span>
+                Создать аккаунт
+            </button>
+        </form>
+
+        <div class="text-center mt-3">
+            <p style="color: var(--text-light);">
+                Уже есть аккаунт?
+                <a href="/auth/login" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                    Войти
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script src="/js/app.js"></script>
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        let isValid = true;
+
+        // Reset errors
+        document.getElementById('usernameError').classList.add('hidden');
+        document.getElementById('passwordError').classList.add('hidden');
+        document.getElementById('errorAlert').classList.add('hidden');
+
+        // Validate username
+        if (username.length < 3) {
+            document.getElementById('usernameError').textContent =
+                'Имя пользователя должно содержать минимум 3 символа';
+            document.getElementById('usernameError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Validate password
+        if (password.length < 8) {
+            document.getElementById('passwordError').textContent =
+                'Пароль должен содержать минимум 8 символов';
+            document.getElementById('passwordError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        if (isValid) {
+            this.submit();
+        }
+    });
+
+    // Check for error parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+
+    if (error) {
+        document.getElementById('errorMessage').textContent =
+            'Ошибка при регистрации. Возможно, такое имя пользователя уже существует.';
+        document.getElementById('errorAlert').classList.remove('hidden');
+    }
+</script>
+</body>
+</html>

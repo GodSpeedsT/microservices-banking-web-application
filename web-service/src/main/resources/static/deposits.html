@@ -1,0 +1,55 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"-->
+<!--      th:replace="layout :: layout(~{::content}, ~{::title})">-->
+<!--<head>-->
+<!--    <title>Мои депозиты</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div th:fragment="content">-->
+<!--    <div class="page-header">-->
+<!--        <h1>Мои депозиты</h1>-->
+<!--        <p>Управление вашими депозитными счетами, <span sec:authentication="name"></span></p>-->
+<!--    </div>-->
+
+<!--    <div th:if="${message}" class="alert alert-warning">-->
+<!--        <span>⚠️</span>-->
+<!--        <span th:text="${message}"></span>-->
+<!--    </div>-->
+
+<!--    <div th:if="${deposits.empty}" class="alert alert-info">-->
+<!--        <span>ℹ️</span>-->
+<!--        <h4>Нет активных депозитов</h4>-->
+<!--        <p>Откройте первый депозитный счет, чтобы начать получать доход.</p>-->
+<!--    </div>-->
+
+<!--    <table th:if="${!deposits.empty}" class="deposit-table">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>ID</th>-->
+<!--            <th>Тип</th>-->
+<!--            <th>Сумма</th>-->
+<!--            <th>Процент (%)</th>-->
+<!--            <th>Начало</th>-->
+<!--            <th>Срок</th>-->
+<!--            <th>Статус</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="deposit : ${deposits}">-->
+<!--            <td th:text="${deposit.id}">DEP001</td>-->
+<!--            <td th:text="${deposit.type}">Накопительный</td>-->
+<!--            <td th:text="${#numbers.formatDecimal(deposit.amount, 0, 'COMMA', 2, 'POINT')} + ' ' + ${deposit.currency}">50,000.00 RUB</td>-->
+<!--            <td th:text="${#numbers.formatDecimal(deposit.interestRate, 0, 'COMMA', 1, 'POINT')}">5.5</td>-->
+<!--            <td th:text="${deposit.startDate}">2024-01-15</td>-->
+<!--            <td th:text="${deposit.endDate}">2025-01-15</td>-->
+<!--            <td>-->
+<!--            <span th:classappend="${deposit.status == 'ACTIVE'} ? 'status-active' : 'status-closed'"-->
+<!--                  th:text="${deposit.status == 'ACTIVE'} ? 'Активен' : 'Закрыт'">ACTIVE</span>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

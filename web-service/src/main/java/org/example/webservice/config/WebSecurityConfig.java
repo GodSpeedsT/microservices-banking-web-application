@@ -14,22 +14,22 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**",
-                                "/auth/register", "/actuator/**").permitAll()
-                        // Разрешаем доступ к странице логина без аутентификации
-                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/", "/index.html", "/login.html", "/register.html",
+                                "/css/**", "/js/**", "/images/**", "/auth/register",
+                                "/actuator/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/auth/login")  // Наша кастомная страница
+                        .loginPage("/login.html")
                         .defaultSuccessUrl("/dashboard", true)
-                        .failureUrl("/auth/login?error=true")
+                        .failureUrl("/login.html?error=true")
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/index.html")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
-                );
+                )
+                .csrf(csrf -> csrf.disable()); // Временно отключите CSRF для отладки
 
         return http.build();
     }
