@@ -35,7 +35,6 @@ public class UserController {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
-        // Стандартные OIDC claims
         Map<String, Object> userInfo = Map.of(
                 "sub", user.getUsername(),
                 "preferred_username", user.getUsername(),
@@ -45,7 +44,6 @@ public class UserController {
         return ResponseEntity.ok(userInfo);
     }
 
-    // Ваш кастомный endpoint (оставьте для обратной совместимости)
     @GetMapping("/auth/user/info")
     public ResponseEntity<UserResponse> getCustomUserInfo(Authentication authentication) {
         String username = authentication.getName();

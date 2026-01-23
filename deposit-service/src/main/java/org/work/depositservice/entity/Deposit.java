@@ -1,9 +1,14 @@
 package org.work.depositservice.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "deposits")
 public class Deposit {
@@ -33,74 +38,9 @@ public class Deposit {
 
     private BigDecimal earnedInterest;
 
-    // Конструкторы, геттеры, сеттеры
     public Deposit() {
         this.startDate = LocalDateTime.now();
         this.status = "ACTIVE";
         this.earnedInterest = BigDecimal.ZERO;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public DepositType getDepositType() {
-        return depositType;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public BigDecimal getEarnedInterest() {
-        return earnedInterest;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public void setDepositType(DepositType depositType) {
-        this.depositType = depositType;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setEarnedInterest(BigDecimal earnedInterest) {
-        this.earnedInterest = earnedInterest;
     }
 }

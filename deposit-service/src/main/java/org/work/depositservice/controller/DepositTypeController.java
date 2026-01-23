@@ -14,27 +14,18 @@ public class DepositTypeController {
     @Autowired
     private DepositTypeService depositTypeService;
 
-    /**
-     * Получить все активные типы депозитов (для клиентов)
-     */
     @GetMapping("/active")
     public ResponseEntity<List<DepositType>> getActiveDepositTypes() {
         List<DepositType> depositTypes = depositTypeService.getAllActiveDepositTypes();
         return ResponseEntity.ok(depositTypes);
     }
 
-    /**
-     * Получить все типы депозитов (для администраторов)
-     */
     @GetMapping
     public ResponseEntity<List<DepositType>> getAllDepositTypes() {
         List<DepositType> depositTypes = depositTypeService.getAllDepositTypes();
         return ResponseEntity.ok(depositTypes);
     }
 
-    /**
-     * Получить тип депозита по ID
-     */
     @GetMapping("/{id}")
     public ResponseEntity<DepositType> getDepositType(@PathVariable Long id) {
         return depositTypeService.getActiveDepositType(id)
@@ -42,9 +33,6 @@ public class DepositTypeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Создать новый тип депозита (администратор)
-     */
     @PostMapping
     public ResponseEntity<DepositType> createDepositType(@RequestBody DepositType depositType) {
         try {
@@ -55,9 +43,6 @@ public class DepositTypeController {
         }
     }
 
-    /**
-     * Обновить тип депозита (администратор)
-     */
     @PutMapping("/{id}")
     public ResponseEntity<DepositType> updateDepositType(
             @PathVariable Long id,
@@ -70,9 +55,6 @@ public class DepositTypeController {
         }
     }
 
-    /**
-     * Деактивировать тип депозита (администратор)
-     */
     @PostMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivateDepositType(@PathVariable Long id) {
         try {
@@ -83,9 +65,6 @@ public class DepositTypeController {
         }
     }
 
-    /**
-     * Активировать тип депозита (администратор)
-     */
     @PostMapping("/{id}/activate")
     public ResponseEntity<Void> activateDepositType(@PathVariable Long id) {
         try {

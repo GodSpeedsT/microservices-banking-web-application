@@ -42,14 +42,14 @@ services:
 #    networks:
 #      - bank-network
 
-#  redis:
-#    image: redis:7-alpine
-#    container_name: bank-redis
-#    ports:
-#      - "6379:6379"
-#    networks:
-#      - bank-network
-#
+  redis:
+    image: redis:7-alpine
+    container_name: bank-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - bank-network
+
 #  config-server:
 #    build: ./infrastructure/config-server
 #    container_name: bank-config-server

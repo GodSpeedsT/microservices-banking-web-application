@@ -31,7 +31,7 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
-        // НОВЫЙ СПОСОБ вместо deprecated applyDefaultSecurity()
+
         OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
                 new OAuth2AuthorizationServerConfigurer();
 

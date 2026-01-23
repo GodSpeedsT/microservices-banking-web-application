@@ -1,9 +1,13 @@
 package org.work.depositservice.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Data
 @Entity
 @Table(name = "accounts")
 public class Account {
@@ -31,63 +35,6 @@ public class Account {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    // Бизнес-методы
     public void deposit(BigDecimal amount) {
         this.balance = this.balance.add(amount);
         this.updatedAt = LocalDateTime.now();

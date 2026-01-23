@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
-                .password(user.getPassword()) // Хэш из БД
+                .password(user.getPassword())
                 .authorities(user.getRoles().stream()
                         .map(role -> new SimpleGrantedAuthority(role.getName()))
                         .collect(Collectors.toList()))

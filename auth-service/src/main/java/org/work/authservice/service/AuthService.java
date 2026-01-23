@@ -15,7 +15,6 @@ import java.util.Optional;
 public class AuthService {
 
     private final UserService userService;
-    // PasswordEncoder оставлен для возможности будущих внутренних проверок, но в основном используется в UserService
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -28,7 +27,6 @@ public class AuthService {
         return newUser;
     }
 
-    // Этот метод теперь нужен для UserService, чтобы он мог находить пользователей
     public Optional<User> findByUsername(String username) {
         return userService.findByUsername(username);
     }

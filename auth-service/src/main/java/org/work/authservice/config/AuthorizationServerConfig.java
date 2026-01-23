@@ -58,7 +58,6 @@ public class AuthorizationServerConfig {
         return new InMemoryRegisteredClientRepository(webClient);
     }
 
-    // Остальные бины без изменений...
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
         KeyPair keyPair = generateRsaKey();

@@ -16,7 +16,6 @@ import org.work.authservice.service.UserService; // Теперь использ�
 @Slf4j
 public class AuthController {
 
-    // Используем UserService напрямую для регистрации
     private final UserService userService;
 
     @PostMapping("/register")
