@@ -3,6 +3,7 @@ package org.work.depositservice.service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimAccessor;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ public class SecurityContextService {
 
     public String getCurrentUserId() {
         return getJwt()
-                .map(jwt -> jwt.getSubject())
+                .map(JwtClaimAccessor::getSubject)
                 .orElseThrow(() -> new RuntimeException("Пользователь не аутентифицирован"));
     }
 
@@ -41,8 +42,7 @@ public class SecurityContextService {
 
     private Optional<Jwt> getJwt() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof JwtAuthenticationToken) {
-            JwtAuthenticationToken jwtAuth = (JwtAuthenticationToken) authentication;
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
             return Optional.of(jwtAuth.getToken());
         }
         return Optional.empty();

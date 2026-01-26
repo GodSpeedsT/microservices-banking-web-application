@@ -1,8 +1,13 @@
 package org.work.depositservice.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "deposit_types")
 public class DepositType {
@@ -24,53 +29,5 @@ public class DepositType {
     @Column(nullable = false)
     private Boolean isActive = true;
 
-    public Long getId() {
-        return id;
-    }
 
-    public String getName() {
-        return name;
-    }
-
-    public Integer getTermMonths() {
-        return termMonths;
-    }
-
-    public BigDecimal getInterestRate() {
-        return interestRate;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setInterestRate(BigDecimal interestRate) {
-        this.interestRate = interestRate;
-    }
-
-    public void setTermMonths(Integer termMonths) {
-        this.termMonths = termMonths;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
-    // Конструкторы, геттеры, сеттеры
 }

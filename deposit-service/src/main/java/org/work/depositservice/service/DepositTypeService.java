@@ -1,9 +1,11 @@
 package org.work.depositservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.work.depositservice.entity.DepositType;
 import org.work.depositservice.repository.DepositTypeRepository;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +15,7 @@ public class DepositTypeService {
     @Autowired
     private DepositTypeRepository depositTypeRepository;
 
+    @Cacheable("depositTypes")
     public List<DepositType> getAllActiveDepositTypes() {
         return depositTypeRepository.findByIsActiveTrue();
     }
@@ -45,7 +48,7 @@ public class DepositTypeService {
         existingDepositType.setInterestRate(updatedDepositType.getInterestRate());
         existingDepositType.setTermMonths(updatedDepositType.getTermMonths());
         existingDepositType.setDescription(updatedDepositType.getDescription());
-        existingDepositType.setActive(updatedDepositType.getActive());
+        existingDepositType.setIsActive(updatedDepositType.getIsActive());
 
         return depositTypeRepository.save(existingDepositType);
     }
@@ -54,7 +57,7 @@ public class DepositTypeService {
         DepositType depositType = depositTypeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Тип депозита не найден"));
 
-        depositType.setActive(false);
+        depositType.setIsActive(false);
         depositTypeRepository.save(depositType);
     }
 
@@ -62,7 +65,7 @@ public class DepositTypeService {
         DepositType depositType = depositTypeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Тип депозита не найден"));
 
-        depositType.setActive(true);
+        depositType.setIsActive(true);
         depositTypeRepository.save(depositType);
     }
 

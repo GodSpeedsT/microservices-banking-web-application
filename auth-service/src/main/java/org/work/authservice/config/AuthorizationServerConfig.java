@@ -33,11 +33,12 @@ import java.util.stream.Collectors;
 @Configuration
 public class AuthorizationServerConfig {
 
+
     @Bean
-    public RegisteredClientRepository registeredClientRepository() {
+    public RegisteredClientRepository registeredClientRepository(PasswordEncoder passwordEncoder) {
         RegisteredClient webClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("web-client")
-                .clientSecret("{noop}secret") // Используем {noop} для простоты
+                .clientSecret(passwordEncoder.encode("secret"))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)

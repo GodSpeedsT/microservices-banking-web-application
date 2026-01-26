@@ -1,3 +1,6 @@
+server:
+  port: 8888
+
 spring:
   application:
     name: config-server
@@ -9,5 +12,3 @@ spring:
           default-label: main
           search-paths: '*'
 
-server:
-  port: 8888

@@ -1,6 +1,7 @@
 package org.work.depositservice.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.work.depositservice.dto.DepositRequest;
@@ -8,96 +9,79 @@ import org.work.depositservice.dto.DepositResponse;
 import org.work.depositservice.entity.Deposit;
 import org.work.depositservice.entity.DepositType;
 import org.work.depositservice.entity.Account;
+import org.work.depositservice.handler.InsufficientFundsException;
 import org.work.depositservice.repository.DepositRepository;
-import org.work.depositservice.repository.DepositTypeRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DepositService {
 
-    @Autowired
-    private DepositRepository depositRepository;
-
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private DepositTypeService depositTypeService;
-
-    @Autowired
-    private InterestService interestService;
-
-    @Autowired
-    private DepositTypeRepository depositTypeRepository;
+    private final DepositRepository depositRepository;
+    private final AccountService accountService;
+    private final DepositTypeService depositTypeService;
+    private final InterestService interestService;
 
     @Transactional
     public DepositResponse createDeposit(DepositRequest request) {
-
         Account account = accountService.getAccountByNumber(request.getAccountNumber())
-                .orElseThrow(() -> new RuntimeException("Счет не найден"));
+                .orElseThrow(() -> new EntityNotFoundException("Счет не найден"));
 
         DepositType depositType = depositTypeService.getActiveDepositType(request.getDepositTypeId())
-                .orElseThrow(() -> new RuntimeException("Тип депозита не найден или не активен"));
+                .orElseThrow(() -> new IllegalStateException("Тип депозита недоступен"));
 
         if (account.getBalance().compareTo(request.getAmount()) < 0) {
-            throw new RuntimeException("Недостаточно средств на счете");
+            throw new InsufficientFundsException("Недостаточно средств для открытия вклада");
         }
 
         account.withdraw(request.getAmount());
-        accountService.updateBalance(account.getAccountNumber(), account.getBalance());
 
         Deposit deposit = new Deposit();
         deposit.setAccount(account);
         deposit.setDepositType(depositType);
         deposit.setAmount(request.getAmount());
-        deposit.setStartDate(LocalDateTime.now());
         deposit.setEndDate(LocalDateTime.now().plusMonths(depositType.getTermMonths()));
 
-        Deposit savedDeposit = depositRepository.save(deposit);
-
-        return convertToResponse(savedDeposit);
-    }
-
-    public List<DepositResponse> getDepositsByClient(String clientId) {
-        return depositRepository.findByAccount_ClientId(clientId)
-                .stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
-    }
-
-    public List<DepositResponse> getDepositsByAccount(String accountNumber) {
-        return depositRepository.findByAccount_AccountNumber(accountNumber)
-                .stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
+        return convertToResponse(depositRepository.save(deposit));
     }
 
     @Transactional
     public void closeDeposit(Long depositId, String clientId) {
         Deposit deposit = depositRepository.findByIdAndAccount_ClientId(depositId, clientId)
-                .orElseThrow(() -> new RuntimeException("Депозит не найден"));
+                .orElseThrow(() -> new EntityNotFoundException("Депозит не найден или принадлежит не вам"));
 
         if (!"ACTIVE".equals(deposit.getStatus())) {
-            throw new RuntimeException("Депозит уже закрыт");
+            throw new IllegalStateException("Депозит уже закрыт");
         }
 
-        BigDecimal totalInterest = interestService.calculateInterest(deposit);
-        deposit.setEarnedInterest(totalInterest);
+        completeClosing(deposit);
+    }
 
-        BigDecimal totalAmount = deposit.getAmount().add(totalInterest);
-        accountService.updateBalance(deposit.getAccount().getAccountNumber(), totalAmount);
+    @Transactional
+    public void closeDepositByAdmin(Long depositId) {
+        Deposit deposit = depositRepository.findById(depositId)
+                .orElseThrow(() -> new EntityNotFoundException("Депозит не найден"));
+        completeClosing(deposit);
+    }
 
+    private void completeClosing(Deposit deposit) {
+        BigDecimal interest = interestService.calculateInterest(deposit);
+        deposit.setEarnedInterest(interest);
         deposit.setStatus("CLOSED");
+
+        deposit.getAccount().deposit(deposit.getAmount().add(interest));
         depositRepository.save(deposit);
     }
 
-    public Optional<DepositType> getActiveDepositType(Long depositTypeId) {
-        return depositTypeRepository.findByIdAndIsActiveTrue(depositTypeId);
+    public List<DepositResponse> getDepositsByClient(String currentUserId) {
+        return depositRepository.findByAccount_ClientId(currentUserId)
+                .stream().map(
+                        this::convertToResponse
+                ).collect(Collectors.toList());
     }
 
     private DepositResponse convertToResponse(Deposit deposit) {
@@ -113,4 +97,5 @@ public class DepositService {
         response.setEarnedInterest(deposit.getEarnedInterest());
         return response;
     }
+
 }
