@@ -12,10 +12,39 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d auth_db"]
+      test: ["CMD-SHELL", "pg_isready -U user -d auth_db"]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - bank-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: bank-keycloak
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://auth-db:5432/auth_db
+      - KC_DB_USERNAME=user
+      - KC_DB_PASSWORD=password
+      - KC_HOSTNAME_STRICT=false
+      - KC_HTTP_ENABLED=true
+    ports:
+      - "8084:8080"
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    networks:
+      - bank-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: bank-redis
+    ports:
+      - "6379:6379"
     networks:
       - bank-network
 
@@ -33,14 +62,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    networks:
-      - bank-network
-
-  redis:
-    image: redis:7-alpine
-    container_name: bank-redis
-    ports:
-      - "6379:6379"
     networks:
       - bank-network
 
@@ -70,29 +91,6 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
-    networks:
-      - bank-network
-
-
-  auth-service:
-    build: ./auth-service
-    container_name: bank-auth-service
-    ports:
-      - "8081:8081"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://bank-config-server:8888
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://bank-eureka-server:8761/eureka/
-    depends_on:
-      auth-db:
-        condition: service_healthy
-      eureka-server:
-        condition: service_started
-    healthcheck:
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8081/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
     networks:
       - bank-network
 
@@ -127,10 +125,10 @@ services:
     depends_on:
       eureka-server:
         condition: service_started
-      auth-service:
-        condition: service_healthy
+      keycloak:
+        condition: service_started
     extra_hosts:
-      - "localhost:host-gateway"
+      - "host.docker.internal:host-gateway"
     networks:
       - bank-network
 
