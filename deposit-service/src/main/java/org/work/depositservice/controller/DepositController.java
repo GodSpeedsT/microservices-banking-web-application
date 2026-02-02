@@ -25,7 +25,6 @@ public class DepositController {
     @GetMapping("/my")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<List<DepositResponse>> getMyDeposits() {
-        // Берем ID прямо из токена, пользователь не может подсмотреть чужие вклады
         String currentUserId = securityContext.getCurrentUserId();
         return ResponseEntity.ok(depositService.getDepositsByClient(currentUserId));
     }
@@ -33,8 +32,8 @@ public class DepositController {
     @GetMapping("/debug-token")
     public Map<String, Object> debug(@AuthenticationPrincipal Jwt jwt) {
         return Map.of(
-                "sub_claim", jwt.getSubject(), // То, что идет в clientId
-                "all_claims", jwt.getClaims()   // Все данные из токена
+                "sub_claim", jwt.getSubject(),
+                "all_claims", jwt.getClaims()
         );
     }
 
@@ -55,7 +54,6 @@ public class DepositController {
     @DeleteMapping("/{depositId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> forceCloseDeposit(@PathVariable Long depositId) {
-        // Админ закрывает любой вклад (логику можно расширить в сервисе)
         depositService.closeDepositByAdmin(depositId);
         return ResponseEntity.ok().build();
     }
