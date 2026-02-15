@@ -24,10 +24,4 @@ public class DepositType {
     @Column(nullable = false)
     private Integer termMonths;
 
-    private String description;
-
-    @Column(nullable = false)
-    private Boolean isActive = true;
-
-
 }

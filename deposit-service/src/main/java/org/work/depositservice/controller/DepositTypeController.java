@@ -8,17 +8,11 @@ import org.work.depositservice.service.DepositTypeService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/deposit-types")
+@RequestMapping("/api/deposits/types")
 public class DepositTypeController {
 
     @Autowired
     private DepositTypeService depositTypeService;
-
-    @GetMapping("/active")
-    public ResponseEntity<List<DepositType>> getActiveDepositTypes() {
-        List<DepositType> depositTypes = depositTypeService.getAllActiveDepositTypes();
-        return ResponseEntity.ok(depositTypes);
-    }
 
     @GetMapping
     public ResponseEntity<List<DepositType>> getAllDepositTypes() {
@@ -26,12 +20,12 @@ public class DepositTypeController {
         return ResponseEntity.ok(depositTypes);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DepositType> getDepositType(@PathVariable Long id) {
-        return depositTypeService.getActiveDepositType(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<DepositType> getDepositType(@PathVariable Long id) {
+//        return depositTypeService.getActiveDepositType(id)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
 
     @PostMapping
     public ResponseEntity<DepositType> createDepositType(@RequestBody DepositType depositType) {
@@ -55,23 +49,5 @@ public class DepositTypeController {
         }
     }
 
-    @PostMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateDepositType(@PathVariable Long id) {
-        try {
-            depositTypeService.deactivateDepositType(id);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
-    @PostMapping("/{id}/activate")
-    public ResponseEntity<Void> activateDepositType(@PathVariable Long id) {
-        try {
-            depositTypeService.activateDepositType(id);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }

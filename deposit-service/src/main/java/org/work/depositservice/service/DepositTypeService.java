@@ -15,15 +15,6 @@ public class DepositTypeService {
     @Autowired
     private DepositTypeRepository depositTypeRepository;
 
-    @Cacheable("depositTypes")
-    public List<DepositType> getAllActiveDepositTypes() {
-        return depositTypeRepository.findByIsActiveTrue();
-    }
-
-    public Optional<DepositType> getActiveDepositType(Long id) {
-        return depositTypeRepository.findByIdAndIsActiveTrue(id);
-    }
-
     public List<DepositType> getAllDepositTypes() {
         return depositTypeRepository.findAll();
     }
@@ -47,29 +38,13 @@ public class DepositTypeService {
         existingDepositType.setName(updatedDepositType.getName());
         existingDepositType.setInterestRate(updatedDepositType.getInterestRate());
         existingDepositType.setTermMonths(updatedDepositType.getTermMonths());
-        existingDepositType.setDescription(updatedDepositType.getDescription());
-        existingDepositType.setIsActive(updatedDepositType.getIsActive());
 
         return depositTypeRepository.save(existingDepositType);
     }
 
-    public void deactivateDepositType(Long id) {
-        DepositType depositType = depositTypeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Тип депозита не найден"));
-
-        depositType.setIsActive(false);
-        depositTypeRepository.save(depositType);
+    public Optional<DepositType> getCurrentDepositType(Long id) {
+        return depositTypeRepository.findCurrentDepositType(id);
     }
 
-    public void activateDepositType(Long id) {
-        DepositType depositType = depositTypeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Тип депозита не найден"));
 
-        depositType.setIsActive(true);
-        depositTypeRepository.save(depositType);
-    }
-
-    public boolean isDepositTypeAvailable(Long id) {
-        return depositTypeRepository.findByIdAndIsActiveTrue(id).isPresent();
-    }
 }

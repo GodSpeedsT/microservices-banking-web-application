@@ -14,7 +14,7 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<AccountDto> createAccount(
             @RequestParam String clientId,
             @RequestParam String currency) {

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.work.depositservice.dto.DepositRequest;
 import org.work.depositservice.dto.DepositResponse;
 import org.work.depositservice.entity.Deposit;
+import org.work.depositservice.entity.DepositStatus;
 import org.work.depositservice.entity.DepositType;
 import org.work.depositservice.entity.Account;
 import org.work.depositservice.handler.InsufficientFundsException;
@@ -31,7 +32,7 @@ public class DepositService {
         Account account = accountService.getAccountByNumber(request.getAccountNumber())
                 .orElseThrow(() -> new EntityNotFoundException("Счет не найден"));
 
-        DepositType depositType = depositTypeService.getActiveDepositType(request.getDepositTypeId())
+        DepositType depositType = depositTypeService.getCurrentDepositType(request.getDepositTypeId())
                 .orElseThrow(() -> new IllegalStateException("Тип депозита недоступен"));
 
         if (account.getBalance().compareTo(request.getAmount()) < 0) {
@@ -54,7 +55,7 @@ public class DepositService {
         Deposit deposit = depositRepository.findByIdAndAccount_ClientId(depositId, clientId)
                 .orElseThrow(() -> new EntityNotFoundException("Депозит не найден или принадлежит не вам"));
 
-        if (!"ACTIVE".equals(deposit.getStatus())) {
+        if (DepositStatus.ACTIVE != deposit.getStatus()) {
             throw new IllegalStateException("Депозит уже закрыт");
         }
 
@@ -71,7 +72,7 @@ public class DepositService {
     private void completeClosing(Deposit deposit) {
         BigDecimal interest = interestService.calculateInterest(deposit);
         deposit.setEarnedInterest(interest);
-        deposit.setStatus("CLOSED");
+        deposit.setStatus(DepositStatus.CLOSED);
 
         deposit.getAccount().deposit(deposit.getAmount().add(interest));
         depositRepository.save(deposit);

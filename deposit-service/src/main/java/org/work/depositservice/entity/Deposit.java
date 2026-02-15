@@ -34,13 +34,13 @@ public class Deposit {
     private LocalDateTime endDate;
 
     @Column(nullable = false)
-    private String status; // ACTIVE, CLOSED, MATURED
+    private DepositStatus status;
 
     private BigDecimal earnedInterest;
 
     public Deposit() {
         this.startDate = LocalDateTime.now();
-        this.status = "ACTIVE";
+        this.status = DepositStatus.ACTIVE;
         this.earnedInterest = BigDecimal.ZERO;
     }
 }

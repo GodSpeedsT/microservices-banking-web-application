@@ -1,18 +1,7 @@
-FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
+FROM node:20-alpine
 WORKDIR /app
-
-COPY pom.xml .
-RUN mvn dependency:go-offline
-
-COPY src ./src
-RUN mvn clean package -DskipTests
-
-FROM eclipse-temurin:21-jre-alpine
-WORKDIR /app
-
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
-
-COPY --from=build /app/target/*.jar app.jar
-
-ENTRYPOINT ["java", "-Xmx512m", "-Xms256m", "-jar", "app.jar"]
+COPY frontend/bank-frontend/package*.json ./
+RUN npm install
+COPY frontend/bank-frontend/ .
+EXPOSE 5173
+CMD ["npm","run","dev","--","--host","0.0.0.0"]

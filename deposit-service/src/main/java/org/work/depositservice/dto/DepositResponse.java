@@ -3,6 +3,7 @@ package org.work.depositservice.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.work.depositservice.entity.DepositStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,6 +19,6 @@ public class DepositResponse {
     private BigDecimal interestRate;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String status;
+    private DepositStatus status;
     private BigDecimal earnedInterest;
 }

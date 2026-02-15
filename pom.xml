@@ -26,7 +26,6 @@
         <module>infrastructure/config-server</module>
         <module>infrastructure/eureka-server</module>
         <module>deposit-service</module>
-        <module>web-service</module>
     </modules>
 
     <dependencyManagement>

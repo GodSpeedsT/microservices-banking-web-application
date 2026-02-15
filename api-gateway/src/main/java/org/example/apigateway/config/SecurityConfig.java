@@ -7,9 +7,14 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.InMemoryReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestCustomizers;
+import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
-import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
+
+import java.util.Base64;
 
 
 @EnableWebFluxSecurity
@@ -23,15 +28,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,
+                                                            ReactiveClientRegistrationRepository reactiveClientRegistrationRepository) {
+
+        DefaultServerOAuth2AuthorizationRequestResolver resolver =
+                new DefaultServerOAuth2AuthorizationRequestResolver(reactiveClientRegistrationRepository);
+
+        resolver.setAuthorizationRequestCustomizer(OAuth2AuthorizationRequestCustomizers.withPkce());
+
         http
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/login/**","/public/**").permitAll()
+                        .pathMatchers("/","/login/**", "/public/**","/login","/favicon.ico").permitAll()
                         .anyExchange().authenticated()
                 )
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(resolver).authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler("http://localhost:5173/dashboard")))
                 .oauth2Client(Customizer.withDefaults())
-                .logout(logout->
+                .logout(logout ->
                         logout.logoutSuccessHandler(oidcLogoutSuccessHandler()))
                 .csrf(ServerHttpSecurity.CsrfSpec::disable);
 
